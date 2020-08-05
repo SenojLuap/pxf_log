@@ -10,10 +10,9 @@ namespace PXFLOG {
         std::shared_ptr<log_entry> entry;
 
         log_event(std::shared_ptr<log_entry> entry);
+        log_event();
 
         static log_event shutdown_event();
     
-    private:
-        log_event();
     };
 }

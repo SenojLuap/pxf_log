@@ -9,6 +9,8 @@ namespace PXFLOG {
         std::string message;
         entry_severity severity;
 
-        log_entry(std::string message, entry_severity severity) : message(message), severity(severity) { }
+        log_entry(std::string message, entry_severity severity);
+
+        std::string output();
     };
 }
