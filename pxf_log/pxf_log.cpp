@@ -7,6 +7,7 @@
 #include <fstream>
 #include <stdexcept>
 #include <cstdio>
+#include <ctime>
 
 #include "log_queue.hpp"
 #include "log_session.hpp"
@@ -99,9 +100,10 @@ namespace PXFLOG {
 
 
     void pxf_log::log(entry_severity severity, std::string message) {
+        time_t time_now = time(nullptr);
         if (session == nullptr)
             throw std::runtime_error("Attempted to emit log entry before log was running");
-        auto entry = std::make_shared<log_entry>(message, severity);
+        auto entry = std::make_shared<log_entry>(message, severity, time_now);
         session->event_queue->push(log_event(entry));
     }
 }
