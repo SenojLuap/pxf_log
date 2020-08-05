@@ -10,6 +10,7 @@ namespace PXFLOG {
     class log_session;
 
     class pxf_log {
+    public:
 
         log_config config;
 
