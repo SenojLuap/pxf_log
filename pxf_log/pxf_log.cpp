@@ -4,6 +4,8 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include <fstream>
+#include <stdexcept>
 
 #include "log_queue.hpp"
 #include "log_session.hpp"
@@ -13,8 +15,16 @@ using namespace std::string_literals;
 
 namespace PXFLOG {
 
-    void log_to_file(std::vector<std::string>& messages, std::string& file_name) {
-        // TODO
+    bool log_to_file(std::vector<std::string>& messages, std::string& file_name) {
+        std::ofstream out_file;
+        out_file.open(file_name.c_str(), std::ofstream::out | std::ofstream::app);
+
+        if (!out_file.good()) return false;
+
+        for (auto& message : messages) out_file << message << std::endl;
+        out_file.close();
+
+        return true;
     }
 
 

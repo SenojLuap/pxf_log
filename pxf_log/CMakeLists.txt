@@ -18,4 +18,5 @@ target_precompile_headers(pxf_log PUBLIC    <thread>
                                             <memory>
                                             <chrono>
                                             <vector>
-                                            <iostream>)
+                                            <iostream>
+                                            <fstream>)
