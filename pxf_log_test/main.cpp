@@ -30,19 +30,21 @@ void main() {
     messages.push_back("Hoogen"s);
     messages.push_back("Bloogen"s);
     messages.push_back("User did a thing"s);
+    messages.push_back("Feed teh kitteh"s);
 
 
-    for (int message_count = 30; message_count > 0; message_count--) {
+    for (int message_count = 5; message_count > 0; message_count--) {
         float second_delay = randF() * 3.0f;
         std::chrono::milliseconds milli_delay(int(second_delay * 1000));
         std::this_thread::sleep_for(milli_delay);
-        std::string message = messages[rand() / messages.size()];
-        PXFLOG::entry_severity severity = (PXFLOG::entry_severity)(rand() / 5);
+        std::string message = messages[rand() % messages.size()];
+        PXFLOG::entry_severity severity = (PXFLOG::entry_severity)(rand() % 5);
         
-        // actually log a message
+        log.log(severity, message);
     }
 
-
+    log.shutdown();
+    std::cout << "---------Test Complete" << std::endl;
     int out;
     std::cin >> out;
 }

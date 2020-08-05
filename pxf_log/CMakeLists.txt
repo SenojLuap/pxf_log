@@ -7,7 +7,8 @@ set(SOURCE_FILES    pxf_log.cpp
                     log_queue.cpp
                     log_event.cpp
                     log_entry.cpp
-                    log_config.cpp)
+                    log_config.cpp
+                    severity.cpp)
 
 add_library(pxf_log STATIC ${SOURCE_FILES})
 target_include_directories(pxf_log PUBLIC ../include)
