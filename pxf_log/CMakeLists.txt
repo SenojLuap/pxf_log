@@ -11,7 +11,7 @@ set(SOURCE_FILES    pxf_log.cpp
                     severity.cpp)
 
 add_library(pxf_log STATIC ${SOURCE_FILES})
-target_include_directories(pxf_log PUBLIC ../include)
+target_include_directories(pxf_log PUBLIC ${CMAKE_SOURCE_DIR}/include)
 target_precompile_headers(pxf_log PUBLIC    <thread>
                                             <mutex>
                                             <string>
