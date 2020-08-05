@@ -32,6 +32,7 @@ namespace PXFLOG {
 
         int32_t millisecond_interval = (int32_t)(config.file_flush_interval * 1000);
         std::chrono::milliseconds file_flush_timeout(millisecond_interval);
+        std::chrono::milliseconds sleep_time(file_flush_timeout.count() / 4);
 
         auto time = steady_clock::now();
         log_event next_event;
@@ -42,12 +43,13 @@ namespace PXFLOG {
                     break;
                 } else {
                     std::string msg = next_event.entry->output();
-                    // TODO: filter on what is enabled
-                    std::cout << msg << std::endl;
-                    pending_log_file.push_back(msg);
+                    if (config.console_output_enabled[next_event.entry->severity])
+                        std::cout << msg << std::endl;
+                    if (config.file_output_enabled[next_event.entry->severity])
+                        pending_log_file.push_back(msg);
                 }
             } else { // No events. Sleep.
-                std::this_thread::sleep_for(std::chrono::milliseconds(250));
+                std::this_thread::sleep_for(sleep_time);
             }
             if ((steady_clock::now() - time) >= file_flush_timeout) {
                 log_to_file(pending_log_file, config.file_name);
