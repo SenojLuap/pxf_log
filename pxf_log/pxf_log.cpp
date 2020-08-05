@@ -103,7 +103,7 @@ namespace PXFLOG {
         time_t time_now = time(nullptr);
         if (session == nullptr)
             throw std::runtime_error("Attempted to emit log entry before log was running");
-        auto entry = std::make_shared<log_entry>(message, severity, time_now);
+        auto entry = std::make_shared<log_entry>(message, severity, time_now, config.name);
         session->event_queue->push(log_event(entry));
     }
 }
