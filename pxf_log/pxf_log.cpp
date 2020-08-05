@@ -6,6 +6,7 @@
 #include <iostream>
 #include <fstream>
 #include <stdexcept>
+#include <cstdio>
 
 #include "log_queue.hpp"
 #include "log_session.hpp"
@@ -74,8 +75,13 @@ namespace PXFLOG {
     }
 
 
-    void pxf_log::start() {
+    void pxf_log::start(bool reset_log_file) {
         if (session == nullptr) {
+
+            if (reset_log_file) {
+                remove(config.file_name.c_str());
+            }
+
             auto queue = new log_queue();
             auto thread = new std::thread(log_thread, config, queue);
             session = std::make_unique<log_session>(thread, queue);

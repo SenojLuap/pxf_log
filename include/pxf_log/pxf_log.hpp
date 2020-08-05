@@ -19,7 +19,7 @@ namespace PXFLOG {
         pxf_log();
         ~pxf_log();
 
-        void start();
+        void start(bool reset_log_file = false);
         void shutdown();
 
         void log(entry_severity severity, std::string message);

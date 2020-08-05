@@ -22,7 +22,7 @@ void main() {
     log.config.file_output_enabled[PXFLOG::entry_severity::WARNING] = true;
     log.config.file_output_enabled[PXFLOG::entry_severity::ERROR] = true;
     log.config.file_output_enabled[PXFLOG::entry_severity::FATAL] = true;
-    log.start();
+    log.start(true);
 
     std::srand(time(NULL));
     std::vector<std::string> messages;
