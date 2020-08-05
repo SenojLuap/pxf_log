@@ -1,8 +1,10 @@
 #pragma once
 
 #include <memory>
+#include <string>
 
 #include "pxf_log/log_config.hpp"
+#include "pxf_log/severity.hpp"
 
 namespace PXFLOG {
 
@@ -19,6 +21,8 @@ namespace PXFLOG {
 
         void start();
         void shutdown();
+
+        void log(entry_severity severity, std::string message);
 
     private:
         std::unique_ptr<log_session> session;

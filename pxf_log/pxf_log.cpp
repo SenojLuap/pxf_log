@@ -52,7 +52,10 @@ namespace PXFLOG {
                 std::this_thread::sleep_for(sleep_time);
             }
             if ((steady_clock::now() - time) >= file_flush_timeout) {
-                log_to_file(pending_log_file, config.file_name);
+                if (!log_to_file(pending_log_file, config.file_name)) {
+                    std::cerr << "Failed to write to log file. File logging disabled" << std::endl;
+                    config.file_output_enabled = std::vector<bool>(5, false);
+                }
                 pending_log_file.clear();
                 time = steady_clock::now();
             }
@@ -86,5 +89,13 @@ namespace PXFLOG {
             session->thread->join();
             session = nullptr;
         }
+    }
+
+
+    void pxf_log::log(entry_severity severity, std::string message) {
+        if (session == nullptr)
+            throw std::runtime_error("Attempted to emit log entry before log was running");
+        auto entry = std::make_shared<log_entry>(message, severity);
+        session->event_queue->push(log_event(entry));
     }
 }
