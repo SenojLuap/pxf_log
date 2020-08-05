@@ -50,15 +50,13 @@ namespace PXFLOG {
                 std::this_thread::sleep_for(std::chrono::milliseconds(250));
             }
             if ((steady_clock::now() - time) >= file_flush_timeout) {
-                // TODO: Actual file name
-                log_to_file(pending_log_file, "TEMP"s);
+                log_to_file(pending_log_file, config.file_name);
                 pending_log_file.clear();
                 time = steady_clock::now();
             }
         }
         if (!pending_log_file.empty())
-            // TODO: Actual file name
-            log_to_file(pending_log_file, "TEMP"s);
+            log_to_file(pending_log_file, config.file_name);
     }
 
 
