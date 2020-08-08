@@ -10,6 +10,7 @@ namespace PXFLOG {
 
     // Internal
     class log_session;
+    class log_queue;
 
     class pxf_log {
     public:
@@ -25,7 +26,8 @@ namespace PXFLOG {
         void log(entry_severity severity, std::string message);
 
     private:
-        std::unique_ptr<log_session> session;
+        std::unique_ptr<std::thread> log_thread;
+        std::unique_ptr<log_queue> message_queue;
     };
     
 }
