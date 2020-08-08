@@ -54,11 +54,11 @@ namespace PXFLOG {
                 std::this_thread::sleep_for(sleep_time);
             }
             if ((steady_clock::now() - time) >= file_flush_timeout) {
-                if (!log_to_file(pending_log_file, config.file_name)) {
+                if (!pending_log_file.empty() && !log_to_file(pending_log_file, config.file_name)) {
                     std::cerr << "Failed to write to log file. File logging disabled" << std::endl;
                     config.file_output_enabled = std::vector<bool>(5, false);
+                    pending_log_file.clear();
                 }
-                pending_log_file.clear();
                 time = steady_clock::now();
             }
         }
