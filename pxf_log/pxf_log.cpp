@@ -10,7 +10,6 @@
 #include <ctime>
 
 #include "log_queue.hpp"
-#include "log_session.hpp"
 
 using namespace std::chrono;
 using namespace std::string_literals;
@@ -30,7 +29,7 @@ namespace PXFLOG {
     }
 
 
-    void log_thread(log_config config, log_queue* queue) {
+    void log_thread_func(log_config config, log_queue* queue) {
 
         int32_t millisecond_interval = (int32_t)(config.file_flush_interval * 1000);
         std::chrono::milliseconds file_flush_timeout(millisecond_interval);
@@ -67,7 +66,7 @@ namespace PXFLOG {
     }
 
 
-    pxf_log::pxf_log() : session(nullptr) {
+    pxf_log::pxf_log() : log_thread(nullptr), message_queue(nullptr) {
     }
 
 
@@ -77,33 +76,33 @@ namespace PXFLOG {
 
 
     void pxf_log::start(bool reset_log_file) {
-        if (session == nullptr) {
+        if (log_thread == nullptr) {
 
             if (reset_log_file) {
                 remove(config.file_name.c_str());
             }
 
-            auto queue = new log_queue();
-            auto thread = new std::thread(log_thread, config, queue);
-            session = std::make_unique<log_session>(thread, queue);
+            message_queue = std::make_unique<log_queue>();
+            log_thread = std::make_unique<std::thread>(log_thread_func, config, message_queue.get());
         }
     }
 
 
     void pxf_log::shutdown() {
-        if (session != nullptr) {
-            session->event_queue->push(log_event::shutdown_event());
-            session->thread->join();
-            session = nullptr;
+        if (log_thread != nullptr) {
+            message_queue->push(log_event::shutdown_event());
+            log_thread->join();
+            log_thread = nullptr;
+            message_queue = nullptr;
         }
     }
 
 
     void pxf_log::log(entry_severity severity, std::string message) {
         time_t time_now = time(nullptr);
-        if (session == nullptr)
+        if (log_thread == nullptr)
             throw std::runtime_error("Attempted to emit log entry before log was running");
         auto entry = std::make_shared<log_entry>(message, severity, time_now, config.name);
-        session->event_queue->push(log_event(entry));
+        message_queue->push(log_event(entry));
     }
 }
