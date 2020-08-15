@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <string>
+#include <thread>
 
 #include "pxf_log/log_config.hpp"
 #include "pxf_log/severity.hpp"
