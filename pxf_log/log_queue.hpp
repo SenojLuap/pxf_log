@@ -9,7 +9,7 @@ namespace PXFLOG {
 
     class log_queue {
     public:
-        void push(log_event& entry);
+        void push(log_event entry);
         bool pop(log_event* result);
 
         log_queue() = default;

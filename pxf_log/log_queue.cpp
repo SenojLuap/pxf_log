@@ -3,7 +3,7 @@
 
 namespace PXFLOG {
 
-    void log_queue::push(log_event& entry) {
+    void log_queue::push(log_event entry) {
         std::unique_lock<std::mutex> lock(queue_mutex);
         queue.push(entry);
     }
